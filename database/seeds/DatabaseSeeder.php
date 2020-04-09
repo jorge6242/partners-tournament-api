@@ -31,6 +31,8 @@ class DatabaseSeeder extends Seeder
         $this->call(LockersLocationSeeder::class);
         $this->call(RecordTypeSeeder::class);
         $this->call(DepartmentSeeder::class);
+        $this->call(CreateRuleTypeSeeder::class);
+        $this->call(CreateTPaymentMethodSeeder::class);
         /***/
 
         $this->call(PersonTableSeeder::class);

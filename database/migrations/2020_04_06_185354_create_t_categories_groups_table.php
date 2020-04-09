@@ -19,8 +19,8 @@ class CreateTCategoriesGroupsTable extends Migration
             $table->integer('age_from')->nullable();
             $table->integer('age_to')->nullable();
             $table->integer('gender_id')->nullable();
-            $table->double('golf_handicap_from', 8, 2);
-            $table->double('golf_handicap_to', 8, 2);
+            $table->double('golf_handicap_from', 8, 2)->nullable();
+            $table->double('golf_handicap_to', 8, 2)->nullable();
             $table->bigInteger('category_id')->nullable();
             $table->timestamps();
         });

@@ -19,10 +19,10 @@ class LocationController extends Controller
      */
     public function index(Request $request)
     {
-        $banks = $this->service->index($request->query('perPage'));
+        $data = $this->service->index($request->query('perPage'));
         return response()->json([
             'success' => true,
-            'data' => $banks
+            'data' => $data
         ]);
     }
 
@@ -48,9 +48,9 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
-        $bankRequest = $request->all();
-        $bank = $this->service->create($bankRequest);
-        return $bank;
+        $dataRequest = $request->all();
+        $data = $this->service->create($dataRequest);
+        return $data;
     }
 
     /**
@@ -61,11 +61,11 @@ class LocationController extends Controller
      */
     public function show($id)
     {
-        $bank = $this->service->read($id);
-        if($bank) {
+        $data = $this->service->read($id);
+        if($data) {
             return response()->json([
                 'success' => true,
-                'data' => $bank
+                'data' => $data
             ]);
         }
     }
@@ -79,12 +79,12 @@ class LocationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $bankRequest = $request->all();
-        $bank = $this->service->update($bankRequest, $id);
-        if($bank) {
+        $dataRequest = $request->all();
+        $data = $this->service->update($dataRequest, $id);
+        if($data) {
             return response()->json([
                 'success' => true,
-                'data' => $bank
+                'data' => $data
             ]);
         }
     }
@@ -97,11 +97,11 @@ class LocationController extends Controller
      */
     public function destroy($id)
     {
-        $bank = $this->service->delete($id);
-        if($bank) {
+        $data = $this->service->delete($id);
+        if($data) {
             return response()->json([
                 'success' => true,
-                'data' => $bank
+                'data' => $data
             ]);
         }
     }
@@ -114,11 +114,11 @@ class LocationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function search(Request $request) {
-        $bank = $this->service->search($request);
-        if($bank) {
+        $data = $this->service->search($request);
+        if($data) {
             return response()->json([
                 'success' => true,
-                'data' => $bank
+                'data' => $data
             ]);
         }
     }

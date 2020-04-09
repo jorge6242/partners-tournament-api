@@ -1,31 +1,32 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Services\GenderService;
 
 use Illuminate\Http\Request;
+use App\Services\GroupService;
+use Barryvdh\DomPDF\Facade as PDF;
 
-class GenderController extends Controller
+class GroupController extends Controller
 {
-    public function __construct(GenderService $service)
-    {
-        $this->service = $service;
+    public function __construct(GroupService $service)
+	{
+		$this->service = $service;
     }
-  /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $response = $this->service->index();
+        $data = $this->service->index($request->query('perPage'));
         return response()->json([
             'success' => true,
-            'data' => $response
+            'data' => $data
         ]);
     }
 
-        /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -47,8 +48,9 @@ class GenderController extends Controller
      */
     public function store(Request $request)
     {
-        $body = $request->all();
-        return $this->service->create($body);
+        $dataRequest = $request->all();
+        $data = $this->service->create($dataRequest);
+        return $data;
     }
 
     /**
@@ -59,11 +61,11 @@ class GenderController extends Controller
      */
     public function show($id)
     {
-        $response = $this->service->read($id);
-        if($response) {
+        $data = $this->service->read($id);
+        if($data) {
             return response()->json([
                 'success' => true,
-                'data' => $response
+                'data' => $data
             ]);
         }
     }
@@ -77,12 +79,12 @@ class GenderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $body = $request->all();
-        $response = $this->service->update($body, $id);
-        if($response) {
+        $dataRequest = $request->all();
+        $data = $this->service->update($dataRequest, $id);
+        if($data) {
             return response()->json([
                 'success' => true,
-                'data' => $response
+                'data' => $data
             ]);
         }
     }
@@ -95,16 +97,16 @@ class GenderController extends Controller
      */
     public function destroy($id)
     {
-        $response = $this->service->delete($id);
-        if($response) {
+        $data = $this->service->delete($id);
+        if($data) {
             return response()->json([
                 'success' => true,
-                'data' => $response
+                'data' => $data
             ]);
         }
     }
 
-        /**
+    /**
      * Get the specified resource by search.
      *
      * @param  string $term
@@ -112,11 +114,11 @@ class GenderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function search(Request $request) {
-        $response = $this->service->search($request);
-        if($response) {
+        $data = $this->service->search($request);
+        if($data) {
             return response()->json([
                 'success' => true,
-                'data' => $response
+                'data' => $data
             ]);
         }
     }

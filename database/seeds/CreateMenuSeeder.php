@@ -32,93 +32,94 @@ class CreateMenuSeeder extends Seeder
             'menu_id' => $menuBase->id,
         ]);
 
-        MenuItem::create([
-            'name' => 'Notas',
-            'slug' => 'notas',
+        $sec = MenuItem::create([
+            'name' => 'Seguridad',
+            'slug' => 'seguridad',
             'parent' => 0,
-            'order' => 0,
-            'description' => 'Notas',
-            'route' => '/dashboard/main',
+            'order' => 1,
+            'description' => 'Seguridad',
+            'route' => '',
             'menu_id' => $menuBase->id,
         ]);
 
         MenuItem::create([
-            'name' => 'Socios',
-            'slug' => 'socios',
-            'parent' => 0,
-            'order' => 0,
-            'description' => 'Socios',
-            'route' => '/dashboard/partner',
+            'name' => 'Usuarios',
+            'slug' => 'usuarios',
+            'parent' => $sec->id,
+            'order' => 2,
+            'description' => 'Usuarios',
+            'route' => '/dashboard/user',
             'menu_id' => $menuBase->id,
         ]);
 
         MenuItem::create([
-            'name' => 'Actualizacion de Datos',
-            'slug' => 'actualizacion-datos',
-            'parent' => 0,
-            'order' => 0,
-            'description' => 'Actualizacion de Datos',
-            'route' => '/dashboard/actualizacion-datos',
-            'menu_id' => $menuBase->id,
-        ]);
-
-       $fact = MenuItem::create([
-            'name' => 'Facturacion',
-            'slug' => 'facturacion',
-            'parent' => 0,
-            'order' => 0,
-            'description' => 'Facturacion',
-            'route' => null,
+            'name' => 'Roles',
+            'slug' => 'roles',
+            'parent' => $sec->id,
+            'order' => 2,
+            'description' => 'Roles',
+            'route' => '/dashboard/role',
             'menu_id' => $menuBase->id,
         ]);
 
         MenuItem::create([
-            'name' => 'Reporte de Pagos',
-            'slug' => 'reporte-pagos',
-            'parent' => $fact->id,
-            'order' => 0,
-            'description' => 'Reporte de Pagos',
-            'route' => '/dashboard/reporte-pagos',
+            'name' => 'Permisos',
+            'slug' => 'permisos',
+            'parent' => $sec->id,
+            'order' => 3,
+            'description' => 'Permisos',
+            'route' => '/dashboard/permission',
             'menu_id' => $menuBase->id,
         ]);
 
         MenuItem::create([
-            'name' => 'Estado de Cuenta',
-            'slug' => 'estado-cuenta',
-            'parent' => $fact->id,
-            'order' => 0,
-            'description' => 'Estado de Cuenta',
-            'route' => '/dashboard/status-account',
+            'name' => 'Widget',
+            'slug' => 'widget',
+            'parent' => $sec->id,
+            'order' => 4,
+            'description' => 'Widget',
+            'route' => '/dashboard/widget',
             'menu_id' => $menuBase->id,
         ]);
 
         MenuItem::create([
-            'name' => 'Facturas por Pagar',
-            'slug' => 'facturas-por-pagar',
-            'parent' => $fact->id,
-            'order' => 0,
-            'description' => 'Facturas por Pagar',
-            'route' => '/dashboard/facturas-por-pagar',
+            'name' => 'Menu',
+            'slug' => 'menu',
+            'parent' => $sec->id,
+            'order' => 5,
+            'description' => 'Menu',
+            'route' => '/dashboard/menu',
+            'menu_id' => $menuBase->id,
+        ]);
+
+        MenuItem::create([
+            'name' => 'Menu Item',
+            'slug' => 'menu-item',
+            'parent' => $sec->id,
+            'order' => 6,
+            'description' => 'Menu',
+            'route' => '/dashboard/menu-item',
             'menu_id' => $menuBase->id,
         ]);
 
         $data = [ 
-            ['menuItem' =>  'inicio', 'role' => 'promotor' ],
-            [ 'menuItem' => 'notas', 'role' => 'promotor' ],
-            [ 'menuItem' => 'socios', 'role' => 'promotor' ],
-            [ 'menuItem' => 'actualizacion-datos', 'role' => 'socio' ],
-            [ 'menuItem' => 'facturacion', 'role' => 'socio' ],
-            [ 'menuItem' => 'reporte-pagos', 'role' => 'socio' ],
-            [ 'menuItem' => 'estado-cuenta', 'role' => 'socio' ],
-            [ 'menuItem' => 'facturas-por-pagar', 'role' => 'socio' ],
+            ['menuItem' =>  'inicio', 'roles' => ['administrador', 'participante'] ],
+            ['menuItem' => 'seguridad', 'roles' => ['administrador']],
+            ['menuItem' => 'roles', 'roles' => ['administrador']],
+            ['menuItem' => 'permisos', 'roles' => ['administrador']],
+            ['menuItem' => 'widget', 'roles' => ['administrador']],
+            ['menuItem' => 'menu', 'roles' => ['administrador']],
+            ['menuItem' => 'menu-item', 'roles' => ['administrador']],
         ];
         foreach ($data as $key => $value) {
-            $admin = Role::where('slug', $value['role'])->first();
-            $menuItem = MenuItem::where('slug', $value['menuItem'])->first();
-            MenuItemRole::create([
-                'role_id' => $admin->id,
-                'menu_item_id' => $menuItem->id,
-            ]);
+            foreach ($value['roles'] as $key => $role) {
+                $menuItem = MenuItem::where('slug', $value['menuItem'])->first();
+                $role = Role::where('slug', $role)->first();
+                MenuItemRole::create([
+                    'role_id' => $role->id,
+                    'menu_item_id' => $menuItem ? $menuItem->id : null,
+                ]);
+            }
         }
     }
 }

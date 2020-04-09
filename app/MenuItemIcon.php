@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TPaymentMethod extends Model
+class MenuItemIcon extends Model
 {
     protected $fillable = [
+        'name', 
+        'slug', 
         'description',
-        'currency_id',
-        'info',
-        'status' 
+        'import',
     ];
 }

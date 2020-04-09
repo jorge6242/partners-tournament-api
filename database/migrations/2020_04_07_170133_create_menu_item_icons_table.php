@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTPaymentMethodsTable extends Migration
+class CreateMenuItemIconsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateTPaymentMethodsTable extends Migration
      */
     public function up()
     {
-        Schema::create('t_payment_methods', function (Blueprint $table) {
+        Schema::create('menu_item_icons', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('description',255)->nullable();
-            $table->bigInteger('currency_id')->nullable();
-            $table->string('info',255)->nullable();
-            $table->boolean('status')->default(1);
+            $table->string('name', 255)->nullable();
+            $table->string('slug', 255)->nullable();
+            $table->string('description', 255)->nullable();
+            $table->string('import', 255)->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateTPaymentMethodsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('t_payment_methods');
+        Schema::dropIfExists('menu_item_icons');
     }
 }

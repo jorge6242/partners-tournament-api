@@ -2,17 +2,21 @@
 
 namespace App\Services;
 
-use App\Repositories\GenderRepository;
+use App\Repositories\TCategoryTypeRepository;
 use Illuminate\Http\Request;
 
-class GenderService {
+class TCategoryTypeService {
 
-	public function __construct(GenderRepository $repository) {
+	public function __construct(TCategoryTypeRepository $repository) {
 		$this->repository = $repository ;
 	}
 
-	public function index() {
-		return $this->repository->all();
+	public function index($perPage) {
+		return $this->repository->all($perPage);
+	}
+
+	public function getList() {
+		return $this->repository->getList();
 	}
 
 	public function create($request) {
@@ -27,10 +31,6 @@ class GenderService {
 
 	public function update($request, $id) {
       return $this->repository->update($id, $request);
-	}
-
-	public function getList() {
-		return $this->repository->getList();
 	}
 
 	public function read($id) {

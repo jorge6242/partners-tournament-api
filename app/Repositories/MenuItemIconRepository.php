@@ -2,16 +2,18 @@
 
 namespace App\Repositories;
 
-use App\Gender;
+use App\Location;
 
-class GenderRepository  {
+class LocationRepository  {
+  
+    protected $post;
 
-    public function __construct(Gender $model) {
+    public function __construct(Location $model) {
       $this->model = $model;
     }
 
     public function find($id) {
-      return $this->model->find($id);
+      return $this->model->find($id, ['id', 'description', 'status']);
     }
 
     public function create($attributes) {
@@ -22,12 +24,12 @@ class GenderRepository  {
       return $this->model->find($id)->update($attributes);
     }
   
-    public function all() {
-      return $this->model->all();
+    public function all($perPage) {
+      return $this->model->query()->select(['id', 'description', 'status'])->paginate($perPage);
     }
 
     public function getList() {
-      return $this->model->query()->select(['id', 'description'])->get();
+      return $this->model->query()->select(['id', 'description', 'status'])->get();
     }
 
     public function delete($id) {
@@ -36,9 +38,9 @@ class GenderRepository  {
 
     public function checkRecord($name)
     {
-      $response = $this->model->where('description', $name)->first();
-      if ($response) {
-        return $response;
+      $data = $this->model->where('description', $name)->first();
+      if ($data) {
+        return true;
       }
       return false; 
     }
@@ -52,7 +54,7 @@ class GenderRepository  {
       if($queryFilter->query('term') === null) {
         $search = $this->model->all();  
       } else {
-        $search = $this->model->where('description', 'like', '%'.$queryFilter->query('term').'%')->get();
+        $search = $this->model->where('description', 'like', '%'.$queryFilter->query('term').'%')->paginate($queryFilter->query('perPage'));
       }
      return $search;
     }

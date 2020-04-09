@@ -23,7 +23,6 @@ class UserService {
 		}
 		
 		public function create($request) {
-			$request['password'] = bcrypt($request['password']);
 			return $this->repository->create($request);
 		}
 

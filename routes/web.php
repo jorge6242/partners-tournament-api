@@ -15,6 +15,10 @@ Route::prefix('api/v1')->group(function () {
     Route::post('/auth/login', 'PassportController@login');
     Route::post('/auth/register', 'PassportController@register');
 
+    Route::get('/gender-list-public', 'GenderController@getList');
+
+    Route::post('/user-create', 'PassportController@register');
+
     Route::middleware('auth:api')->group(function () {
 
 
@@ -44,6 +48,7 @@ Route::prefix('api/v1')->group(function () {
 
         Route::resource('/gender', 'GenderController');
         Route::get('/gender-search', 'GenderController@search');
+        Route::get('/gender-list', 'GenderController@getList');
 
         Route::resource('/relation-type', 'RelationTypeController');
         Route::get('/relation-type-search', 'RelationTypeController@search');
@@ -106,6 +111,35 @@ Route::prefix('api/v1')->group(function () {
         Route::get('/note-list', 'NoteController@getList');
         Route::get('/note-search', 'NoteController@search');
         Route::get('/note-by-person', 'NoteController@getByPerson');
+
+        Route::resource('/tcategory', 'TCategoryController');
+        Route::get('/tcategory-list', 'TCategoryController@getList');
+        Route::get('/tcategory-search', 'TCategoryController@search');
+
+        Route::resource('/tcategory-type', 'TCategoryTypeController');
+        Route::get('/tcategory-type-list', 'TCategoryTypeController@getList');
+        Route::get('/tcategory-type-search', 'TCategoryTypeController@search');
+
+        Route::resource('/trule-type', 'TRuleTypeController');
+        Route::get('/trule-type-list', 'TRuleTypeController@getList');
+        Route::get('/trule-type-search', 'TRuleTypeController@search');
+
+        Route::resource('/tournament', 'TournamentController');
+        Route::get('/tournament-list', 'TournamentController@getList');
+        Route::get('/tournament-search', 'TournamentController@search');
+
+        Route::resource('/tpayment-method', 'TPaymentMethodController');
+        Route::get('/tpayment-method-list', 'TPaymentMethodController@getList');
+        Route::get('/tpayment-method-search', 'TPaymentMethodController@search');
+
+        Route::resource('/tcategories-group', 'TCategoriesGroupController');
+        Route::get('/tcategories-group-list', 'TCategoriesGroupController@getList');
+        Route::get('/tcategories-group-search', 'TCategoriesGroupController@search');
+
+        Route::resource('/group', 'GroupController');
+        Route::get('/group-list', 'GroupController@getList');
+        Route::get('/group-search', 'GroupController@search');
+
 
         /* |-------------------------------------------------------------------------- |*/    
 

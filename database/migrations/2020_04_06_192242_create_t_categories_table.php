@@ -18,6 +18,7 @@ class CreateTCategoriesTable extends Migration
             $table->string('description')->nullable();
             $table->string('image')->nullable();
             $table->boolean('status')->default(1);
+            $table->bigInteger('t_category_type_id')->nullable();
             $table->timestamps();
         });
     }
