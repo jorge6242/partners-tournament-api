@@ -200,11 +200,16 @@ Route::prefix('api/v1')->group(function () {
         Route::resource('/menu', 'MenuController');
         Route::get('/menu-list', 'MenuController@getList');
         Route::get('/menu-list-search', 'MenuController@search');
+        Route::get('/get-menu-list', 'MenuController@getMenuList');
 
         Route::resource('/menu-item', 'MenuItemController');
         Route::get('/menu-item-list', 'MenuItemController@getList');
         Route::get('/menu-item-search', 'MenuItemController@search');
         Route::get('/menu-item-parents', 'MenuItemController@getParents');
+
+        Route::resource('/menu-item-icon', 'MenuItemIconController');
+        Route::get('/menu-item-icon-search', 'MenuItemIconController@search');
+        Route::get('/menu-item-icon-list', 'MenuItemIconController@getList');
 
 
         Route::resource('/widget', 'WidgetController');

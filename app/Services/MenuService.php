@@ -25,6 +25,10 @@ class MenuService {
 		return $this->repository->all($perPage);
 	}
 
+		public function getMenuList() {
+		return $this->repository->getMenuList();
+	}
+
 	public function getList() {
 		return $this->repository->getList();
 	}

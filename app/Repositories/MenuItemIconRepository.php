@@ -2,18 +2,24 @@
 
 namespace App\Repositories;
 
-use App\Location;
+use App\MenuItemIcon;
 
-class LocationRepository  {
+class MenuItemIconRepository  {
   
     protected $post;
 
-    public function __construct(Location $model) {
+    public function __construct(MenuItemIcon $model) {
       $this->model = $model;
     }
 
     public function find($id) {
-      return $this->model->find($id, ['id', 'description', 'status']);
+      return $this->model->find($id, [
+        'id',
+        'name', 
+        'slug', 
+        'description',
+        'import',
+    ]);
     }
 
     public function create($attributes) {
@@ -25,11 +31,23 @@ class LocationRepository  {
     }
   
     public function all($perPage) {
-      return $this->model->query()->select(['id', 'description', 'status'])->paginate($perPage);
+      return $this->model->query()->select([
+        'id',
+        'name', 
+        'slug', 
+        'description',
+        'import',
+    ])->paginate($perPage);
     }
 
     public function getList() {
-      return $this->model->query()->select(['id', 'description', 'status'])->get();
+      return $this->model->query()->select([
+        'id',
+        'name', 
+        'slug', 
+        'description',
+        'import',
+    ])->get();
     }
 
     public function delete($id) {
