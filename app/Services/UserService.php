@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Auth;
+
+use App\Role;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\BackOffice\Services\LoginTokenService;

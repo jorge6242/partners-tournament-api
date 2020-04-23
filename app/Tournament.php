@@ -8,8 +8,10 @@ class Tournament extends Model
 {
     protected $fillable = [
         'description',
+        'picture',
         'max_participants',
         'description_price',
+        'description_details',
         'template_welcome_mail',
         'template_confirmation_mail',
         'amount',
@@ -38,5 +40,22 @@ class Tournament extends Model
     public function groups()
     {
         return $this->belongsToMany('App\TCategoriesGroup', 't_category_groups__tournaments', 'tournament_id', 't_categories_groups_id');
+    }
+
+
+    /**
+     * The sports that belong to the share.
+     */
+    public function rules()
+    {
+        return $this->hasOne('App\TRuleType', 'id', 't_rule_type_id');
+    }
+
+        /**
+     * The sports that belong to the share.
+     */
+    public function currency()
+    {
+        return $this->hasOne('App\Currency', 'id', 'currency_id');
     }
 }

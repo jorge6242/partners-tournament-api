@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Role;
 use App\Repositories\ShareRepository;
 
 use Illuminate\Http\Request;
@@ -23,7 +24,9 @@ class PassportController extends Controller
     {
         $attr = $request->all();
         $user = User::create($attr);
-        return response()->json(['$user' => $user], 200);
+        $role = Role::where('slug', 'participante')->first();
+        $user->assignRole($role->id);
+        return response()->json(['user' => $user], 200);
     }
  
     /**

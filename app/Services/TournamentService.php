@@ -2,21 +2,27 @@
 
 namespace App\Services;
 
+use App\TournamentUser;
 use App\Repositories\TournamentRepository;
 use App\Repositories\TCategoryGroupsTournamentRepository;
 use App\Repositories\TournamentTPaymentMethodRepository;
 use Illuminate\Http\Request;
+
+use Storage;
+use Carbon\Carbon;
 
 class TournamentService {
 
 	public function __construct(
 		TournamentRepository $repository,
 		TCategoryGroupsTournamentRepository $tCategoryGroupsTournamentRepository,
-		TournamentTPaymentMethodRepository $tournamentTPaymentMethodRepository
+		TournamentTPaymentMethodRepository $tournamentTPaymentMethodRepository,
+		TournamentUser $tournamentUserModel
 		) {
 		$this->repository = $repository;
 		$this->tCategoryGroupsTournamentRepository = $tCategoryGroupsTournamentRepository;
 		$this->tournamentTPaymentMethodRepository = $tournamentTPaymentMethodRepository;
+		$this->tournamentUserModel = $tournamentUserModel;
 	}
 
 	public function index($perPage) {
@@ -27,15 +33,38 @@ class TournamentService {
 		return $this->repository->getList();
 	}
 
+	public function validateFile($file) {
+
+		$fileToParse = preg_replace('/^data:application\/\w+;base64,/', '', $file);
+		$ext = explode(';', $file)[0];
+		$ext = explode('/', $ext)[1];
+
+		$find = 'data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,';
+		$pos = strpos($file, $find);
+		if($pos !== false) {
+			$fileToParse = str_replace('data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,', '', $file);
+			$ext = 'docx';
+		}
+		$base64File = base64_decode($fileToParse);
+		
+		return (object)['ext' => $ext, 'content' => $base64File];
+	}
+
 	public function create($request) {
+		$image = '';
 		if ($this->repository->checkRecord($request['description'])) {
             return response()->json([
                 'success' => false,
-                'message' => 'Record already exist'
+                'message' => 'Torneo ya existe'
             ])->setStatusCode(400);
-        }
+		}
+		if($request['picture'] !== null) {
+				$date = Carbon::now();
+				\Image::make($request['picture'])->save(public_path('tournaments/').$request['description'].'.png');
+				$request['picture'] = $request['description'].'.png';
+		}
 		$data = $this->repository->create($request);
-
+			
 
 		if ($request['payments']) {
 			$payments = $request['payments'];
@@ -127,5 +156,67 @@ class TournamentService {
 	*/
 	public function search($queryFilter) {
 		return $this->repository->search($queryFilter);
- 	}
+	 }
+
+
+	public function getTokenString($length){
+		$token = "";
+		$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		$codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
+		$codeAlphabet.= "0123456789";
+		$max = strlen($codeAlphabet); // edited
+		
+		for ($i=0; $i < $length; $i++) {
+			$token .= $codeAlphabet[random_int(0, $max-1)];
+		}
+		return $token;
+	}
+	 
+	 public function storeParticipant($request) {
+		$date = Carbon::now();
+		$user = auth()->user();
+		$isValid = $this->tournamentUserModel->query()
+			->where('user_id', $user->id)
+			->where('status', 1)
+			->with(['tournament'])
+			->first();
+			if($isValid) {
+				$tournament = $isValid->tournament()->first();
+			return response()->json([
+                'success' => false,
+                'message' => 'Participante ya esta registrado en : '.$tournament->description.''
+            ])->setStatusCode(400);
+		}
+		$request['locator'] = $this->getTokenString(10);
+		$request['confirmation_link'] = md5($user->doc_id.$date.microtime());
+		$data = $this->tournamentUserModel->create($request);
+		if($request['attachFile'] !== null) {
+			$parseFile = $this->validateFile($request['attachFile']);
+			$filename = $data->id.'-invoice-'.$date->year.'.'.$parseFile->ext;
+			Storage::disk('tournaments')->put($filename,$parseFile->content);
+			$attr = [ 'attach_file' => $filename];
+			$this->tournamentUserModel->find($data->id)->update($attr);
+		}
+		return $data;
+	 }
+
+	 public function getByCategory($id) {
+		return $this->repository->getByCategory($id);
+	  }
+
+	  public function getInscriptions($queryFilter) {
+		return $this->repository->getInscriptions($queryFilter);
+	  }
+
+	  	  public function getInscriptionsReport($queryFilter, $isPdf = false) {
+		return $this->repository->getInscriptionsReport($queryFilter, $isPdf);
+	  }
+
+	  public function getParticipant($id){
+		return $this->tournamentUserModel->find($id);
+	  }
+
+	  public function updateParticipant($request){
+		return $this->tournamentUserModel->find($request['id'])->update($request);
+	  }
 }

@@ -16,7 +16,7 @@ class CreateTCategoriesTable extends Migration
         Schema::create('t_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('description')->nullable();
-            $table->string('image')->nullable();
+            $table->string('picture')->nullable();
             $table->boolean('status')->default(1);
             $table->bigInteger('t_category_type_id')->nullable();
             $table->timestamps();

@@ -27,6 +27,7 @@ class CreateTournamentsTable extends Migration
             $table->dateTime('date_from', 0)->nullable();
             $table->dateTime('date_to', 0)->nullable();
             $table->boolean('status')->default(1);
+            $table->string('picture',255)->nullable();
             $table->bigInteger('t_rule_type_id')->nullable();
             $table->bigInteger('currency_id')->nullable();
             $table->bigInteger('t_categories_id')->nullable();

@@ -13,7 +13,9 @@ class TCategoryRepository  {
     }
 
     public function find($id) {
-      return $this->model->find($id, ['id', 'description', 'status', 'image']);
+      $data = $this->model->find($id, ['id', 'description', 'status', 'picture']);
+      $data->picture = url('storage/categories/'.$data->picture);
+      return $data;
     }
 
     public function create($attributes) {
@@ -25,11 +27,15 @@ class TCategoryRepository  {
     }
   
     public function all($perPage) {
-      return $this->model->query()->select(['id', 'description', 'status', 'image'])->paginate($perPage);
+      return $this->model->query()->select(['id', 'description', 'picture'])->paginate($perPage);
     }
 
     public function getList() {
-      return $this->model->query()->select(['id', 'description', 'status', 'image'])->get();
+      $categories = $this->model->query()->select(['id', 'description', 'picture'])->get();
+      foreach ($categories as $key => $value) {
+        $categories[$key]->picture = url('storage/categories/'.$value->picture);
+      }
+      return $categories;
     }
 
     public function delete($id) {

@@ -25,7 +25,14 @@ class TCategoryService {
                 'success' => false,
                 'message' => 'Record already exist'
             ])->setStatusCode(400);
-        }
+		}
+		$image = $request['picture'];
+		if($image !== null) {
+			\Image::make($request['picture'])->save(public_path('storage/categories/').$request['description'].'.png');
+			$request['picture'] = $request['description'].'.png';
+		} else {
+			$request['picture'] = "partner-empty.png";
+		}
 		return $this->repository->create($request);
 	}
 

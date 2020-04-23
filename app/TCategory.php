@@ -10,5 +10,6 @@ class TCategory extends Model
         'description',
         'image',
         'status',
+        'picture',
     ];
 }

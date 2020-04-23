@@ -19,5 +19,22 @@ class TournamentUser extends Model
         'user_id',
         't_payment_methods_id',
         't_categories_groups_id',
+        'user_notes',
+        'comments',
     ];
+
+    public function payment()
+    {
+        return $this->hasOne('App\TPaymentMethod', 'id', 't_payment_methods_id');
+    }
+
+    public function tournament()
+    {
+        return $this->hasOne('App\Tournament', 'id', 'tournament_id');
+    }
+
+    public function user()
+    {
+        return $this->hasOne('App\User', 'id', 'user_id');
+    }
 }

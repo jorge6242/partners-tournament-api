@@ -19,6 +19,8 @@ Route::prefix('api/v1')->group(function () {
 
     Route::post('/user-create', 'PassportController@register');
 
+    Route::get('/parameter-logo', 'ParameterController@getLogo');
+
     Route::middleware('auth:api')->group(function () {
 
 
@@ -127,6 +129,13 @@ Route::prefix('api/v1')->group(function () {
         Route::resource('/tournament', 'TournamentController');
         Route::get('/tournament-list', 'TournamentController@getList');
         Route::get('/tournament-search', 'TournamentController@search');
+        Route::post('/tournament-participant', 'TournamentController@storeParticipant');
+        Route::put('/tournament-participant-update', 'TournamentController@updateParticipant');
+        Route::get('/tournament-participant-get', 'TournamentController@getParticipant');
+        Route::get('/tournament-by-category', 'TournamentController@getByCategory');
+        Route::get('/tournament-inscriptions', 'TournamentController@getInscriptions');
+        Route::get('/tournament-inscriptions-report', 'TournamentController@getInscriptionsReport');
+        Route::get('/tournament-inscriptions-report-pdf', 'TournamentController@getInscriptionsReportPDF');
 
         Route::resource('/tpayment-method', 'TPaymentMethodController');
         Route::get('/tpayment-method-list', 'TPaymentMethodController@getList');

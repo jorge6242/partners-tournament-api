@@ -40,6 +40,16 @@ class CreateMenuSeeder extends Seeder
             'menu_id' => $menuBase->id,
         ]);
 
+        MenuItem::create([
+            'name' => 'Registro de Torneo',
+            'slug' => 'registro-torneo',
+            'parent' => 0,
+            'order' => 0,
+            'description' => 'Registro de Torneo',
+            'route' => '/dashboard/tournament-new',
+            'menu_id' => $menuBase->id,
+        ]);
+
         $sec = MenuItem::create([
             'name' => 'Seguridad',
             'slug' => 'seguridad',
@@ -122,6 +132,7 @@ class CreateMenuSeeder extends Seeder
 
         $data = [ 
             ['menuItem' =>  'inicio', 'roles' => ['administrador', 'participante'] ],
+            ['menuItem' =>  'registro-torneo', 'roles' => ['administrador', 'participante'] ],
             ['menuItem' => 'seguridad', 'roles' => ['administrador']],
             ['menuItem' => 'usuarios    ', 'roles' => ['administrador']],
             ['menuItem' => 'roles', 'roles' => ['administrador']],

@@ -54,6 +54,21 @@ class TournamentController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeParticipant(Request $request)
+    {
+        $dataRequest = $request->all();
+        $data = $this->service->storeParticipant($dataRequest);
+        return $data;
+    }
+
+
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -122,4 +137,90 @@ class TournamentController extends Controller
             ]);
         }
     }
+
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getByCategory(Request $request)
+    {
+        $data = $this->service->getByCategory($request['id']);
+        return $data;
+    }
+
+            /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getInscriptions(Request $request)
+    {
+        $data = $this->service->getInscriptions($request);
+        return $data;
+    }
+
+
+            /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getInscriptionsReport(Request $request)
+    {
+        $data = $this->service->getInscriptionsReport($request);      
+        return $data;
+    }
+
+                /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getInscriptionsReportPDF(Request $request)
+    {
+        $data = $this->service->getInscriptionsReport($request, true);
+        $data = [
+            'data' => $data
+        ];
+        $pdf = PDF::loadView('reports/participantsReport', $data);
+        return $pdf->download('participantsReport.pdf');
+        
+    }
+
+            /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getParticipant(Request $request)
+    {
+        $dataRequest = $request->all();
+        $data = $this->service->getParticipant($request['id']);
+        return $data;
+    }
+
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateParticipant(Request $request)
+    {
+        $dataRequest = $request->all();
+        $data = $this->service->updateParticipant($dataRequest);
+        if($data) {
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ]);
+        }
+    }
+
 }
