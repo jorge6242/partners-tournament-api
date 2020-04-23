@@ -14,8 +14,8 @@ class AddFieldTournamentUsersTable extends Migration
     public function up()
     {
         Schema::table('tournament_users', function(Blueprint $table) {
-            $table->text('user_notes')->default("");
-            $table->text('comments')->default("");
+            $table->text('user_notes')->nullable();
+            $table->text('comments')->nullable();
         });
     }
 
