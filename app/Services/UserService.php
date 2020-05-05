@@ -87,4 +87,8 @@ class UserService {
 			'message' => 'You must login first'
 		])->setStatusCode(401);
 		}
+
+		public function search($query) {
+			return $this->repository->search($query);
+		}
 }
