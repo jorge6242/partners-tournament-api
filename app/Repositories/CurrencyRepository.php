@@ -13,7 +13,7 @@ class CurrencyRepository  {
     }
 
     public function find($id) {
-      return $this->model->find($id);
+      return $this->model->query->select(['id', 'description', 'unicode'])->where('id', $id)->first();
     }
 
     public function create($attributes) {

@@ -15,4 +15,12 @@ class TCategoriesGroup extends Model
         'golf_handicap_to',
         'category_id',
     ];
+
+    public function gender() {
+        return $this->hasOne('App\Gender', 'id', 'gender_id');
+    }
+
+    public function category() {
+        return $this->hasOne('App\TCategory', 'id', 'category_id');
+    }
 }

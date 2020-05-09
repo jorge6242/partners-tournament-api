@@ -65,7 +65,15 @@ return [
         ],
         'tournaments' => [
             'driver' => 'local',
-            'root' => public_path('tournaments'),
+            'root' => public_path('storage/tournaments'),
+        ],
+        'tournamentFiles' => [
+            'driver' => 'local',
+            'root' => public_path('storage/tournamentFiles'),
+        ],
+        'categories' => [
+            'driver' => 'local',
+            'root' => public_path('storage/categories'),
         ],
     ],
 

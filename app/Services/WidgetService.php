@@ -28,7 +28,7 @@ class WidgetService {
 		if ($this->repository->checkRecord($request['description'])) {
             return response()->json([
                 'success' => false,
-                'message' => 'Record already exist'
+                'message' => 'Registro ya existe'
             ])->setStatusCode(400);
 		}
 		

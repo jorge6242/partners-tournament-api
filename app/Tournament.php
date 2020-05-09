@@ -58,4 +58,12 @@ class Tournament extends Model
     {
         return $this->hasOne('App\Currency', 'id', 'currency_id');
     }
+
+        /**
+     * The sports that belong to the share.
+     */
+    public function category()
+    {
+        return $this->hasOne('App\TCategory', 'id', 't_categories_id');
+    }
 }

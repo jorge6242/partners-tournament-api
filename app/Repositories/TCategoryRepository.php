@@ -13,7 +13,7 @@ class TCategoryRepository  {
     }
 
     public function find($id) {
-      $data = $this->model->find($id, ['id', 'description', 'status', 'picture']);
+      $data = $this->model->find($id, ['id', 'description', 'status', 'picture', 't_category_type_id']);
       $data->picture = url('storage/categories/'.$data->picture);
       return $data;
     }
@@ -27,11 +27,11 @@ class TCategoryRepository  {
     }
   
     public function all($perPage) {
-      return $this->model->query()->select(['id', 'description', 'picture'])->paginate($perPage);
+      return $this->model->query()->select(['id', 'description', 'picture', 'status', 't_category_type_id'])->with(['type'])->paginate($perPage);
     }
 
     public function getList() {
-      $categories = $this->model->query()->select(['id', 'description', 'picture'])->get();
+      $categories = $this->model->query()->select(['id', 'description', 'picture'])->with(['type'])->get();
       foreach ($categories as $key => $value) {
         $categories[$key]->picture = url('storage/categories/'.$value->picture);
       }

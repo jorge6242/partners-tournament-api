@@ -59,8 +59,7 @@ class TournamentService {
             ])->setStatusCode(400);
 		}
 		if($request['picture'] !== null) {
-				$date = Carbon::now();
-				\Image::make($request['picture'])->save(public_path('tournaments/').$request['description'].'.png');
+				\Image::make($request['picture'])->save(public_path('storage/tournaments/').$request['description'].'.png');
 				$request['picture'] = $request['description'].'.png';
 		}
 		$data = $this->repository->create($request);
@@ -139,6 +138,18 @@ class TournamentService {
 				}
 			}
 		}
+
+		$image = $request['picture'];
+		if (substr($image, 0, 4) === "http" ) {
+			$request['picture'] = $request['description'].'.png';
+		} else {
+			if($image !== null) {
+				\Image::make($request['picture'])->save(public_path('storage/tournaments/').$request['description'].'.png');
+				$request['picture'] = $request['description'].'.png';
+			} else {
+				$request['picture'] = "empty.png";
+			}
+		}
       	return $this->repository->update($id, $request);
 	}
 
@@ -193,7 +204,7 @@ class TournamentService {
 		if($request['attachFile'] !== null) {
 			$parseFile = $this->validateFile($request['attachFile']);
 			$filename = $data->id.'-invoice-'.$date->year.'.'.$parseFile->ext;
-			Storage::disk('tournaments')->put($filename,$parseFile->content);
+			Storage::disk('tournamentFiles')->put($filename,$parseFile->content);
 			$attr = [ 'attach_file' => $filename];
 			$this->tournamentUserModel->find($data->id)->update($attr);
 		}

@@ -43,7 +43,7 @@ class TCategoriesGroupRepository  {
           'golf_handicap_from',
           'golf_handicap_to',
           'category_id',
-          ])->paginate($perPage);
+          ])->with(['gender', 'category'])->paginate($perPage);
     }
 
     public function getList() {

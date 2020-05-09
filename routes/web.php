@@ -82,6 +82,11 @@ Route::prefix('api/v1')->group(function () {
         Route::get('/location-list', 'LocationController@getList');
         Route::get('/location-search', 'LocationController@search');
 
+        Route::resource('/t-category-group', 'TCategoryGroupController');
+        Route::get('/t-category-group-list', 'TCategoryGroupController@getList');
+        Route::get('/t-category-group-search', 'TCategoryGroupController@search');
+
+
         Route::resource('/parameter', 'ParameterController');
         Route::get('/parameter-list', 'ParameterController@getList');
         Route::get('/parameter-search', 'ParameterController@search');

@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Tournament;
 use App\TournamentUser;
+use App\TCategoriesGroup;
+use App\TCategoryGroups_Tournament;
 
 class TournamentRepository  {
   
@@ -36,9 +38,10 @@ class TournamentRepository  {
         'currency_id',
         't_categories_id',
         't_category_types_id',
+        'status',
         ])->where('id', $id)->with(['payments', 'groups'])->first();
         if($tournament->picture !== null) {
-          $tournament->picture = url('tournaments/'.$tournament->picture);
+          $tournament->picture = url('storage/tournaments/'.$tournament->picture);
         }
         return $tournament;
     }
@@ -69,7 +72,8 @@ class TournamentRepository  {
           'currency_id',
           't_categories_id',
           't_category_types_id',
-          ])->paginate($perPage);
+          'status',
+          ])->with(['category','currency'])->paginate($perPage);
     }
 
     public function getList() {
@@ -92,6 +96,7 @@ class TournamentRepository  {
           'currency_id',
           't_categories_id',
           't_category_types_id',
+          'status',
           ])->with(['rules','currency','payments','groups'])->get();
         foreach ($tournaments as $key => $value) {
           if($value->picture !== null) {
@@ -148,10 +153,11 @@ class TournamentRepository  {
         'currency_id',
         't_categories_id',
         't_category_types_id',
+        'status',
         ])->with(['rules','currency','payments','groups'])->where('t_categories_id', $category)->get();
       foreach ($tournaments as $key => $value) {
         if($value->picture !== null) {
-          $tournaments[$key]->picture = url('tournaments/'.$value->picture);
+          $tournaments[$key]->picture = url('storage/tournaments/'.$value->picture);
         }
       }
       return $tournaments;
@@ -216,7 +222,19 @@ class TournamentRepository  {
             }
           }
 
-          $inscriptions->get();
+         $ins = $inscriptions->get();
+          $groups = TCategoriesGroup::all();
+          foreach ($groups as $key1 => $group) {
+            $users = array();
+            foreach ($ins as $key2 => $element) {
+                $valid = TournamentUser::where('t_categories_groups_id', $group->id)->where('tournament_id',$element->tournament_id)->with(['user'])->first();
+                if($valid) {
+                  array_push($users, [ 'user' => $valid->user()->first()]);
+                }
+              }
+              $groups[$key1]->users = $users;
+            }
+          return $groups;
             if ($isPDF) {
               return  $inscriptions->get();
             }

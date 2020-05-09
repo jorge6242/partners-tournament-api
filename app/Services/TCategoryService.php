@@ -23,7 +23,7 @@ class TCategoryService {
 		if ($this->repository->checkRecord($request['description'])) {
             return response()->json([
                 'success' => false,
-                'message' => 'Record already exist'
+                'message' => 'Registro ya existe'
             ])->setStatusCode(400);
 		}
 		$image = $request['picture'];
@@ -31,12 +31,23 @@ class TCategoryService {
 			\Image::make($request['picture'])->save(public_path('storage/categories/').$request['description'].'.png');
 			$request['picture'] = $request['description'].'.png';
 		} else {
-			$request['picture'] = "partner-empty.png";
+			$request['picture'] = "empty.png";
 		}
 		return $this->repository->create($request);
 	}
 
 	public function update($request, $id) {
+		$image = $request['picture'];
+		if (substr($image, 0, 4) === "http" ) {
+			$request['picture'] = $request['description'].'.png';
+		} else {
+			if($image !== null) {
+				\Image::make($request['picture'])->save(public_path('storage/categories/').$request['description'].'.png');
+				$request['picture'] = $request['description'].'.png';
+			} else {
+				$request['picture'] = "empty.png";
+			}
+		}
       return $this->repository->update($id, $request);
 	}
 
