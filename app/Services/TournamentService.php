@@ -51,6 +51,7 @@ class TournamentService {
 	}
 
 	public function create($request) {
+		\Storage::disk('tournaments')->put('testfile.txt','ContentTest');
 		$image = '';
 		if ($this->repository->checkRecord($request['description'])) {
             return response()->json([
@@ -138,7 +139,7 @@ class TournamentService {
 				}
 			}
 		}
-
+		\Storage::disk('tournaments')->put('testfile.txt','ContentTest');
 		$image = $request['picture'];
 		if (substr($image, 0, 4) === "http" ) {
 			$request['picture'] = $request['description'].'.png';
