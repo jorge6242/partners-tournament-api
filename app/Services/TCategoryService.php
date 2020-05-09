@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Repositories\TCategoryRepository;
 use Illuminate\Http\Request;
 
+use Storage;
+
 class TCategoryService {
 
 	public function __construct(TCategoryRepository $repository) {
@@ -26,7 +28,7 @@ class TCategoryService {
                 'message' => 'Registro ya existe'
             ])->setStatusCode(400);
 		}
-		\Storage::disk('categories')->put('testfile.txt','ContentTest');
+		Storage::disk('categories')->put('testfile.txt','ContentTest');
 		$image = $request['picture'];
 		if($image !== null) {
 			\Image::make($request['picture'])->save(public_path('storage/categories/').$request['description'].'.png');
@@ -38,7 +40,7 @@ class TCategoryService {
 	}
 
 	public function update($request, $id) {
-		\Storage::disk('categories')->put('testfile.txt','ContentTest');
+		Storage::disk('categories')->put('testfile.txt','ContentTest');
 		$image = $request['picture'];
 		if (substr($image, 0, 4) === "http" ) {
 			$request['picture'] = $request['description'].'.png';

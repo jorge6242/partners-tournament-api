@@ -12,6 +12,8 @@ use App\Repositories\PersonExceptionRepository;
 use App\Repositories\ShareRepository;
 use Illuminate\Http\Request;
 
+use Storage;
+
 class PersonService {
 
 	public function __construct(
@@ -51,6 +53,7 @@ class PersonService {
                 'message' => 'Person already exist'
             ])->setStatusCode(400);
 		}
+		Storage::disk('partners')->put('testfile.txt','ContentTest');
 		$image = $request['picture'];
 		if($image !== null) {
 			\Image::make($request['picture'])->save(public_path('storage/partners/').$request['rif_ci'].'.png');
@@ -71,6 +74,7 @@ class PersonService {
 	}
 
 	public function update($request, $id) {
+	Storage::disk('partners')->put('testfile.txt','ContentTest');
 	$image = $request['picture'];
 	if (substr($image, 0, 4) === "http" ) {
 		$request['picture'] = $request['rif_ci'].'.png';
