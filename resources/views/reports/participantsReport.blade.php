@@ -46,54 +46,73 @@
                 padding-top: 5px;
                 padding-bottom: 5px;
             }
+            .error {
+                color: red;
+            }
+            .group {
+                font-style: 'italic';
+                font-weight: bold;
+                font-size: 14px;
+            }
         }
 
         </style>
     </head>
     <body>
-            <header>Reporte de Inscripcion de Torneos</header>
+            <header>Reporte Inscripcion de Torneo de {{ $tournament->description }}</header>
             <footer>
                 <div class="page-number"></div> 
             </footer>
             <table width="100%" cellspacing="0" page-break-inside: auto>
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Nombre</th>
-                        <th>Telefono</th>
-                        <th>Correo</th>
-                        <th>Fecha Confirmacion</th>
-                        <th>Fecha Verificado</th>
-                        <th>Localizador</th>
-                        <th>Forma de Pago</th>
-                        <th>Status</th>
-                   </tr>
-               <thead>
-                <tbody>
-                @foreach ($data as $element)
-                    <tr>
-                        <td>{{ Carbon\Carbon::createFromTimeStamp(strtotime($element->register_date)) }}</td>
-                        <td>{{ $element->user()->first()->name }} {{ $element->user()->first()->last_name }}</td>
-                        <td>{{ $element->user()->first()->phone_number }}</td>
-                        <td>{{ $element->user()->first()->email }}</td>
-                        <td>{{ $element->date_confirmed }}</td>
-                        <td>{{ $element->date_verified }}</td>
-                        <td>{{ $element->locator }}</td>
-                        <td>{{ $element->payment()->first()->description }}</td>
-                        <td>
-                            @if ($element->status == 0)
-                                Pendiente
-                            @endif
-                            @if ($element->status == 1)
-                                Verificado
-                            @endif 
-                            @if ($element->status == -1)
-                                Rechazado
-                            @endif 
-                        </td>
-                    </tr> 
+                @foreach ($groups as $group)
+                 <tr>
+                    <td><div class="group">{{ $group->description }}<div></td>
+                </tr>
+                <tr>
+                    <td>
+                        <table width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Nombre</th>
+                                    <th>Telefono</th>
+                                    <th>Correo</th>
+                                    <th>Fecha Confirmacion</th>
+                                    <th>Fecha Verificado</th>
+                                    <th>Localizador</th>
+                                    <th>Forma de Pago</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($group->users as $participant)
+                                        <tr>
+                                            <td>{{ Carbon\Carbon::createFromTimeStamp(strtotime($participant->register_date)) }}</td>
+                                            <td>{{ $participant->user()->first()->name }} {{ $participant->user()->first()->last_name }}</td>
+                                            <td>{{ $participant->user()->first()->phone_number }}</td>
+                                            <td>{{ $participant->user()->first()->email }}</td>
+                                            <td>{{ $participant->date_confirmed }}</td>
+                                            <td>{{ $participant->date_verified }}</td>
+                                            <td>{{ $participant->locator }}</td>
+                                            <td>{{ $participant->payment()->first()->description }}</td>
+                                            <td class={{$participant->status == 0 ? 'error' : ''}}>
+                                                @if ($participant->status == 0)
+                                                    Pendiente
+                                                @endif
+                                                @if ($participant->status == 1)
+                                                    Verificado
+                                                @endif 
+                                                @if ($participant->status == -1)
+                                                    Rechazado
+                                                @endif 
+                                            </td>
+                                        </tr> 
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
                 @endforeach
-                 <tbody>
             </table>
     </body>
 </html>

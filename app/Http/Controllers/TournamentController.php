@@ -185,8 +185,10 @@ class TournamentController extends Controller
     {
         $data = $this->service->getInscriptionsReport($request, true);
         $data = [
-            'data' => $data
+            'tournament' => $data->tournament,
+            'groups' => $data->groups
         ];
+        
         $pdf = PDF::loadView('reports/participantsReport', $data);
         return $pdf->download('participantsReport.pdf');
         
