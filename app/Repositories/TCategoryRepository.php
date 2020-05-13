@@ -60,7 +60,7 @@ class TCategoryRepository  {
       if($queryFilter->query('term') === null) {
         $search = $this->model->all();  
       } else {
-        $search = $this->model->where('description', 'like', '%'.$queryFilter->query('term').'%')->paginate($queryFilter->query('perPage'));
+        $search = $this->model->where('description', 'like', '%'.$queryFilter->query('term').'%')->with(['type'])->paginate($queryFilter->query('perPage'));
       }
      return $search;
     }

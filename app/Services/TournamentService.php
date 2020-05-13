@@ -190,13 +190,14 @@ class TournamentService {
 		$isValid = $this->tournamentUserModel->query()
 			->where('user_id', $user->id)
 			->where('status', 1)
+			->where('tournament_id', $request['tournament_id'] )
 			->with(['tournament'])
 			->first();
 			if($isValid) {
 				$tournament = $isValid->tournament()->first();
 			return response()->json([
                 'success' => false,
-                'message' => 'Participante ya esta registrado en : '.$tournament->description.''
+                'message' => 'Participante ya esta registrado en el Torneo : '.$tournament->description.''
             ])->setStatusCode(400);
 		}
 		$request['locator'] = $this->getTokenString(10);
@@ -218,6 +219,10 @@ class TournamentService {
 
 	  public function getInscriptions($queryFilter) {
 		return $this->repository->getInscriptions($queryFilter);
+	  }
+
+	  public function getInscriptionsByParticipant($queryFilter) {
+		return $this->repository->getInscriptionsByParticipant($queryFilter);
 	  }
 
 	  	  public function getInscriptionsReport($queryFilter, $isPdf = false) {

@@ -81,7 +81,7 @@ class TCategoriesGroupRepository  {
       if($queryFilter->query('term') === null) {
         $search = $this->model->all();  
       } else {
-        $search = $this->model->where('description', 'like', '%'.$queryFilter->query('term').'%')->paginate($queryFilter->query('perPage'));
+        $search = $this->model->where('description', 'like', '%'.$queryFilter->query('term').'%')->with(['gender', 'category'])->paginate($queryFilter->query('perPage'));
       }
      return $search;
     }

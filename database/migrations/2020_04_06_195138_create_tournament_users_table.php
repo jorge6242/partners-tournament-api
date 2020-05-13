@@ -17,7 +17,7 @@ class CreateTournamentUsersTable extends Migration
             $table->date('register_date')->nullable();
             $table->string('attach_file',255)->nullable();
             $table->string('confirmation_link',255)->nullable();
-            $table->boolean('status')->default(1);
+            $table->integer('status')->nullable();
             $table->date('date_confirmed')->nullable();
             $table->date('date_verified')->nullable();
             $table->date('locator')->nullable();

@@ -26,6 +26,7 @@ class TournamentRepository  {
         'description',
         'max_participants',
         'description_details',
+        'description_price',
         'template_welcome_mail',
         'template_confirmation_mail',
         'amount',
@@ -100,7 +101,7 @@ class TournamentRepository  {
           ])->with(['rules','currency','payments','groups'])->get();
         foreach ($tournaments as $key => $value) {
           if($value->picture !== null) {
-            $tournaments[$key]->picture = url('tournaments/'.$value->picture);
+            $tournaments[$key]->picture = url('storage/tournaments/'.$value->picture);
           }
         }
         return $tournaments;
@@ -188,11 +189,33 @@ class TournamentRepository  {
         $inscriptions->get();
         foreach ($inscriptions as $key => $value) {
           if($value->attach_file !== null) {
-            $inscriptions[$key]->attach_file = url('tournaments/'.$value->attach_file);
+            $inscriptions[$key]->attach_file = url('storage/tournamentFiles/'.$value->attach_file);
           }
         }
         return $inscriptions->paginate($queryFilter->query('perPage'));
-      } 
+      }
+
+      public function getInscriptionsByParticipant($queryFilter) {
+        $user = auth()->user();
+        $inscriptions = $this->tournamentUserModel->query()
+          ->where('user_id', $user->id)->with([
+              'user' => function($q){
+                $q->select('id', 'name', 'last_name', 'doc_id', 'email', 'phone_number');
+              },
+              'tournament' => function($q) {
+                $q->with('category');
+              },
+              'payment' => function($q){
+                $q->select('id', 'description');
+              },
+            ])->orderBy('register_date', 'DESC')->paginate($queryFilter->query('perPage'));
+            foreach ($inscriptions as $key => $value) {
+              if($value->attach_file !== null) {
+                $inscriptions[$key]->attach_file = url('storage/tournamentFiles/'.$value->attach_file);
+              }
+            }
+            return $inscriptions;
+        } 
 
       public function getInscriptionsReport($queryFilter, $isPDF) {
         $inscriptions = $this->tournamentUserModel->query();
@@ -205,7 +228,6 @@ class TournamentRepository  {
             $q->select('id', 'description');
           },
           ]);
-
           if($queryFilter->query('status') !== null) {
             $inscriptions->where('status', $queryFilter->query('status'));
           }
@@ -246,7 +268,7 @@ class TournamentRepository  {
             }
           foreach ($inscriptions as $key => $value) {
             if($value->attach_file !== null) {
-              $inscriptions[$key]->attach_file = url('tournaments/'.$value->attach_file);
+              $inscriptions[$key]->attach_file = url('storage/tournamentFiles/'.$value->attach_file);
             }
           }
           return $inscriptions->paginate($queryFilter->query('perPage'));

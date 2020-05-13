@@ -151,7 +151,7 @@ class TournamentController extends Controller
     }
 
             /**
-     * Store a newly created resource in storage.
+     *
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -159,6 +159,18 @@ class TournamentController extends Controller
     public function getInscriptions(Request $request)
     {
         $data = $this->service->getInscriptions($request);
+        return $data;
+    }
+
+    /**
+     * 
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getInscriptionsByParticipant(Request $request)
+    {
+        $data = $this->service->getInscriptionsByParticipant($request);
         return $data;
     }
 
