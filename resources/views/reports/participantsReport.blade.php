@@ -46,8 +46,14 @@
                 padding-top: 5px;
                 padding-bottom: 5px;
             }
-            .error {
+            .err-blue {
+                color: blue;
+            }
+            .err-red {
                 color: red;
+            }
+            .err-green {
+                color: green;
             }
             .group {
                 font-style: 'italic';
@@ -95,7 +101,7 @@
                                             <td>{{ $participant->date_verified }}</td>
                                             <td>{{ $participant->locator }}</td>
                                             <td>{{ $participant->payment()->first()->description }}</td>
-                                            <td class={{$participant->status == 0 ? 'error' : ''}}>
+                                            <td class={{$participant->status == 0 ? 'err-blue' : (($participant->status == 1) ? 'err-green' : 'err-red')}}>
                                                 @if ($participant->status == 0)
                                                     Pendiente
                                                 @endif

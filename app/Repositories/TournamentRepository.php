@@ -186,13 +186,14 @@ class TournamentRepository  {
             }
           }
         }
-        $inscriptions->get();
+        $inscriptions = $inscriptions->paginate($queryFilter->query('perPage'));
         foreach ($inscriptions as $key => $value) {
           if($value->attach_file !== null) {
             $inscriptions[$key]->attach_file = url('storage/tournamentFiles/'.$value->attach_file);
+            $inscriptions[$key]->other = "1";
           }
         }
-        return $inscriptions->paginate($queryFilter->query('perPage'));
+        return $inscriptions;
       }
 
       public function getInscriptionsByParticipant($queryFilter) {
@@ -266,11 +267,12 @@ class TournamentRepository  {
                 $currentTournament = Tournament::where('id', $queryFilter->query('tournament'))->with(['category'])->first();
               return  (object)[ 'groups' => $groups, 'tournament' => $currentTournament ];
             }
-          foreach ($inscriptions as $key => $value) {
-            if($value->attach_file !== null) {
-              $inscriptions[$key]->attach_file = url('storage/tournamentFiles/'.$value->attach_file);
-            }
-          }
-          return $inscriptions->paginate($queryFilter->query('perPage'));
+            $inscriptions = $inscriptions->paginate($queryFilter->query('perPage'));
+              foreach ($inscriptions as $key => $value) {
+                if($value->attach_file !== null) {
+                  $inscriptions[$key]->attach_file = url('storage/tournamentFiles/'.$value->attach_file);
+                }
+              }
+          return $inscriptions;
         }  
 }
