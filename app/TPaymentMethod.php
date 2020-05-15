@@ -12,4 +12,10 @@ class TPaymentMethod extends Model
         'info',
         'status' 
     ];
+
+    public function currency()
+    {
+        return $this->hasOne('App\Currency', 'id', 'currency_id');
+    }
+
 }

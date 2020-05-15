@@ -37,7 +37,7 @@ class TPaymentMethodRepository  {
           'currency_id',
           'info',
           'status' 
-          ])->paginate($perPage);
+          ])->with(['currency'])->paginate($perPage);
     }
 
     public function getList() {
@@ -72,7 +72,7 @@ class TPaymentMethodRepository  {
       if($queryFilter->query('term') === null) {
         $search = $this->model->all();  
       } else {
-        $search = $this->model->where('description', 'like', '%'.$queryFilter->query('term').'%')->paginate($queryFilter->query('perPage'));
+        $search = $this->model->where('description', 'like', '%'.$queryFilter->query('term').'%')->with(['currency'])->paginate($queryFilter->query('perPage'));
       }
      return $search;
     }
