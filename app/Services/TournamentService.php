@@ -171,6 +171,15 @@ class TournamentService {
 	 }
 
 
+	/**
+	 *  Search resource from repository
+	 * @param  object $queryFilter
+	*/
+	public function searchInscriptions($queryFilter) {
+		return $this->repository->searchInscriptions($queryFilter);
+	 }
+
+
 	public function getTokenString($length){
 		$token = "";
 		$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -189,7 +198,6 @@ class TournamentService {
 		$user = auth()->user();
 		$isValid = $this->tournamentUserModel->query()
 			->where('user_id', $user->id)
-			->where('status', 1)
 			->where('tournament_id', $request['tournament_id'] )
 			->with(['tournament'])
 			->first();
@@ -200,6 +208,7 @@ class TournamentService {
                 'message' => 'Participante ya esta registrado en el Torneo : '.$tournament->description.''
             ])->setStatusCode(400);
 		}
+		$request['register_date'] = $date;
 		$request['locator'] = $this->getTokenString(10);
 		$request['confirmation_link'] = md5($user->doc_id.$date.microtime());
 		$data = $this->tournamentUserModel->create($request);

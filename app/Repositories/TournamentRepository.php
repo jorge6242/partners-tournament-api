@@ -186,6 +186,14 @@ class TournamentRepository  {
             }
           }
         }
+
+        if($queryFilter->query('term') !== null) {
+          $query = $queryFilter->query('term');
+          $inscriptions->whereHas('user', function($q) use($query) {
+            $q->where('name', 'like', "%{$query}%")->orWhere('last_name', 'like', "%{$query}%")->orWhere('doc_id', 'like', "%{$query}%");
+          });
+        }
+
         $inscriptions = $inscriptions->paginate($queryFilter->query('perPage'));
         foreach ($inscriptions as $key => $value) {
           if($value->attach_file !== null) {
