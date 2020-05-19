@@ -110,9 +110,9 @@ class TournamentRepository  {
     }
 
     public function delete($id) {
-      $data = $this->model->find($id);
-      $data->payment()->delete();
-      $data->group()->delete();
+      $data = $this->model->where('id', $id)->with(['paymentDelete','groupDelete'])->first();
+      $data->paymentDelete()->delete();
+      $data->groupDelete()->delete();
       return $data->delete();
     }
 

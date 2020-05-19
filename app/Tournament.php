@@ -28,9 +28,9 @@ class Tournament extends Model
 
     /**
      * to delete reasons
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
-    public function payment()
+    public function paymentDelete()
     {
         return $this->hasMany('App\TournamentTPaymentMethod', 'tournament_id', 'id');
     }
@@ -45,9 +45,9 @@ class Tournament extends Model
 
     /**
      * to delete reasons
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
-    public function group()
+    public function groupDelete()
     {
         return $this->hasMany('App\TCategoryGroups_Tournament', 'tournament_id', 'id');
     }

@@ -166,7 +166,11 @@ class TournamentService {
                 'message' => 'El torneo no puede eliminarse porque tiene inscriptiones asociadas'
             ])->setStatusCode(400);
 		}
-      return $this->repository->delete($id);
+		$data = $this->repository->delete($id);
+		return response()->json([
+			'success' => true,
+			'data' => $data
+		  ]);
 	}
 
 	/**
