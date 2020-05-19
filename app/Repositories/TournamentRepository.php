@@ -170,6 +170,7 @@ class TournamentRepository  {
     }
 
     public function getAvailableTournamentsByCategory($category) {
+      $date = Carbon::now()->toDateTimeString();
       $tournaments =  $this->model->query()->select([
         'id',
         'description',
@@ -190,13 +191,39 @@ class TournamentRepository  {
         't_categories_id',
         't_category_types_id',
         'status',
-        ])->with(['rules','currency','payments','groups'])->where('t_categories_id', $category)->whereDate('date_register_to', '>=', Carbon::now())->get();
+        ])->with(['rules','currency','payments','groups'])->where('t_categories_id', $category)->where('date_register_from', '<=', $date)->where('date_register_to', '>=', $date)->get();
       foreach ($tournaments as $key => $value) {
         if($value->picture !== null) {
           $tournaments[$key]->picture = url('storage/tournaments/'.$value->picture);
         }
       }
       return $tournaments;
+    }
+
+    public function getAvailableTournament($id) {
+      $date = Carbon::now()->toDateTimeString();
+      $tournament =  $this->model->query()->select([
+        'id',
+        'description',
+        'picture',
+        'max_participants',
+        'description_price',
+        'description_details',
+        'template_welcome_mail',
+        'template_confirmation_mail',
+        'amount',
+        'participant_type',
+        'date_register_from',
+        'date_register_to',
+        'date_from',
+        'date_to',
+        't_rule_type_id',
+        'currency_id',
+        't_categories_id',
+        't_category_types_id',
+        'status',
+        ])->where('id', $id)->where('date_register_from', '<=', $date)->where('date_register_to', '>=', $date)->first();   
+      return $tournament;
     }
 
     public function getInscriptions($queryFilter) {

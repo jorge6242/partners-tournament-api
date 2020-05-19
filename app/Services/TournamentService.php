@@ -241,6 +241,10 @@ class TournamentService {
 		return $this->repository->getAvailableTournamentsByCategory($id);
 	  }
 
+	  public function getAvailableTournament($id) {
+		return $this->repository->getAvailableTournament($id);
+	  }
+
 	  public function getInscriptions($queryFilter) {
 		return $this->repository->getInscriptions($queryFilter);
 	  }
