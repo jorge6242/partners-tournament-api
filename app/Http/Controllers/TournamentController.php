@@ -112,13 +112,7 @@ class TournamentController extends Controller
      */
     public function destroy($id)
     {
-        $data = $this->service->delete($id);
-        if($data) {
-            return response()->json([
-                'success' => true,
-                'data' => $data
-            ]);
-        }
+        return $this->service->delete($id);
     }
 
     /**
@@ -164,6 +158,18 @@ class TournamentController extends Controller
     public function getByCategory(Request $request)
     {
         $data = $this->service->getByCategory($request['id']);
+        return $data;
+    }
+
+            /**
+     * get available tournaments by category
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getAvailableTournamentsByCategory(Request $request)
+    {
+        $data = $this->service->getAvailableTournamentsByCategory($request['id']);
         return $data;
     }
 

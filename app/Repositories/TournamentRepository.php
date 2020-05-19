@@ -7,6 +7,8 @@ use App\TournamentUser;
 use App\TCategoriesGroup;
 use App\TCategoryGroups_Tournament;
 
+use Carbon\Carbon;
+
 class TournamentRepository  {
   
     protected $post;
@@ -108,7 +110,10 @@ class TournamentRepository  {
     }
 
     public function delete($id) {
-     return $this->model->find($id)->delete();
+      $data = $this->model->find($id);
+      $data->payment()->delete();
+      $data->group()->delete();
+      return $data->delete();
     }
 
     public function checkRecord($name)
@@ -156,6 +161,36 @@ class TournamentRepository  {
         't_category_types_id',
         'status',
         ])->with(['rules','currency','payments','groups'])->where('t_categories_id', $category)->get();
+      foreach ($tournaments as $key => $value) {
+        if($value->picture !== null) {
+          $tournaments[$key]->picture = url('storage/tournaments/'.$value->picture);
+        }
+      }
+      return $tournaments;
+    }
+
+    public function getAvailableTournamentsByCategory($category) {
+      $tournaments =  $this->model->query()->select([
+        'id',
+        'description',
+        'picture',
+        'max_participants',
+        'description_price',
+        'description_details',
+        'template_welcome_mail',
+        'template_confirmation_mail',
+        'amount',
+        'participant_type',
+        'date_register_from',
+        'date_register_to',
+        'date_from',
+        'date_to',
+        't_rule_type_id',
+        'currency_id',
+        't_categories_id',
+        't_category_types_id',
+        'status',
+        ])->with(['rules','currency','payments','groups'])->where('t_categories_id', $category)->whereDate('date_register_to', '>=', Carbon::now())->get();
       foreach ($tournaments as $key => $value) {
         if($value->picture !== null) {
           $tournaments[$key]->picture = url('storage/tournaments/'.$value->picture);

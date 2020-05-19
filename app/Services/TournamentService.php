@@ -159,6 +159,13 @@ class TournamentService {
 	}
 
 	public function delete($id) {
+		$tournamenUser = $this->tournamentUserModel->where('tournament_id',$id)->first();
+		if($tournamenUser) {
+			return response()->json([
+                'success' => false,
+                'message' => 'El torneo no puede eliminarse porque tiene inscriptiones asociadas'
+            ])->setStatusCode(400);
+		}
       return $this->repository->delete($id);
 	}
 
@@ -224,6 +231,10 @@ class TournamentService {
 
 	 public function getByCategory($id) {
 		return $this->repository->getByCategory($id);
+	  }
+
+	  public function getAvailableTournamentsByCategory($id) {
+		return $this->repository->getAvailableTournamentsByCategory($id);
 	  }
 
 	  public function getInscriptions($queryFilter) {

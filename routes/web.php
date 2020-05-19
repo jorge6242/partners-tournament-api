@@ -139,6 +139,7 @@ Route::prefix('api/v1')->group(function () {
         Route::put('/tournament-participant-update', 'TournamentController@updateParticipant');
         Route::get('/tournament-participant-get', 'TournamentController@getParticipant');
         Route::get('/tournament-by-category', 'TournamentController@getByCategory');
+        Route::get('/available-tournaments-by-category', 'TournamentController@getAvailableTournamentsByCategory');
         Route::get('/tournament-inscriptions', 'TournamentController@getInscriptions');
         Route::get('/tournament-inscriptions-participant', 'TournamentController@getInscriptionsByParticipant');
         Route::get('/tournament-inscriptions-report', 'TournamentController@getInscriptionsReport');

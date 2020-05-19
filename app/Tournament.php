@@ -26,12 +26,30 @@ class Tournament extends Model
         't_category_types_id',
     ];
 
+    /**
+     * to delete reasons
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function payment()
+    {
+        return $this->hasMany('App\TournamentTPaymentMethod', 'tournament_id', 'id');
+    }
+
         /**
      * The professions that belong to the person.
      */
     public function payments()
     {
         return $this->belongsToMany('App\TPaymentMethod', 'tournament_t_payment_methods', 'tournament_id', 't_payment_methods_id');
+    }
+
+    /**
+     * to delete reasons
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function group()
+    {
+        return $this->hasMany('App\TCategoryGroups_Tournament', 'tournament_id', 'id');
     }
 
             /**
