@@ -226,7 +226,14 @@ class TournamentService {
 		if($request['attachFile'] !== null) {
 			$parseFile = $this->validateFile($request['attachFile']);
 			$filename = $data->id.'-invoice-'.$date->year.'.'.$parseFile->ext;
-			Storage::disk('tournamentFiles')->put($filename,$parseFile->content);
+			if($parseFile->ext === 'png' || $parseFile->ext === 'jpg' || $parseFile->ext === 'jpeg' ) {
+				if($parseFile->ext === 'jpg' || $parseFile->ext === 'jpeg') {
+					$filename = $data->id.'-invoice-'.$date->year.'.png';
+				}
+				\Image::make($request['attachFile'])->save(public_path('storage/tournamentFiles/').$filename);
+			} else {
+				Storage::disk('tournamentFiles')->put($filename,$parseFile->content);
+			}	
 			$attr = [ 'attach_file' => $filename];
 			$this->tournamentUserModel->find($data->id)->update($attr);
 		}
