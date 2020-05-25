@@ -30,16 +30,32 @@ class UserService {
 
 		public function update($request, $id) {
 			$user = $this->repository->find($id);
-			$user->revokeAllRoles();
-			$user = $this->repository->find($id);
-			$roles = json_decode($request['roles']);
 			
-			if(count($roles)) {
+			if($request['roles'] !== null) {
+				$roles = json_decode($request['roles']);
+				$user->revokeAllRoles();
 				foreach ($roles as $role) {
 					$user->assignRole($role);
 				}
 			}
+
 			return $this->repository->update($id, $request);
+		}
+
+		public function registerPassword($request) {
+			$user = $this->repository->checkToRegisterPassword($request);
+			if(!$user) {
+				return response()->json([
+					'success' => false,
+					'message' => 'Los datos de usuario no coinciden, intente de nuevo'
+				])->setStatusCode(400);
+			}
+			$attr = [ 'password' => bcrypt($request['password'])];
+			$data = $this->repository->update($user->id, $attr);
+			return response()->json([
+                'success' => true,
+                'data' => $data
+            ]);
 		}
 
 		public function read($id) {

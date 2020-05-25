@@ -21,6 +21,8 @@ Route::prefix('api/v1')->group(function () {
 
     Route::get('/parameter-logo', 'ParameterController@getLogo');
 
+    Route::post('/user-register-password', 'UserController@registerPassword');
+
     Route::middleware('auth:api')->group(function () {
 
 

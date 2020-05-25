@@ -49,6 +49,11 @@ class UserRepository  {
       return false; 
     }
 
+    public function checkToRegisterPassword($request)
+    {
+      return $this->model->where('doc_id', $request['doc_id'])->where('email', $request['email'])->where('phone_number', $request['phone_number'])->first();
+    }
+
     public function forcedLogin($username)
     {
       return $this->model->where('username', $username)->first(); 

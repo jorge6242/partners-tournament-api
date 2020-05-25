@@ -32,7 +32,8 @@ class User extends Authenticatable
         'handicap',
         'handicapFVG',
         'gender_id',
-        'people_id'
+        'people_id',
+        'new_user'
     ];
 
     /**
