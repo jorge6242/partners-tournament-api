@@ -23,6 +23,13 @@ class PassportController extends Controller
     public function register(Request $request)
     {
         $attr = $request->all();
+        $checkUser = User::where('doc_id', $request['doc_id'])->first();
+        if ($checkUser) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Usuario ya existe'
+            ])->setStatusCode(400);
+        }
         $user = User::create($attr);
         $role = Role::where('slug', 'participante')->first();
         $user->assignRole($role->id);
