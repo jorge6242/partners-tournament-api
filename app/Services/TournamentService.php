@@ -271,4 +271,8 @@ class TournamentService {
 	  public function updateParticipant($request){
 		return $this->tournamentUserModel->find($request['id'])->update($request);
 	  }
+
+	  public function getAvailablePlayerTournament($id) {
+		return $this->repository->getAvailablePlayerTournament($id);
+	  }
 }

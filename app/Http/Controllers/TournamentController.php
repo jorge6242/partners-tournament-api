@@ -189,6 +189,21 @@ class TournamentController extends Controller
             ]);
     }
 
+        /**
+     * get available tournament
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getAvailablePlayerTournament(Request $request)
+    {
+        $data = $this->service->getAvailablePlayerTournament($request['id']);
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+            ]);
+    }
+
             /**
      *
      *

@@ -200,6 +200,19 @@ class TournamentRepository  {
       return $tournaments;
     }
 
+    public function getAvailablePlayerTournament($id){
+      $user = auth()->user();
+      $exist = $this->tournamentUserModel->query()
+			->where('user_id', $user->id)
+			->where('tournament_id', $id)
+			->with(['tournament'])
+			->first();
+			if($exist) {
+				return true;
+      }
+      return false;
+    }
+
     public function getAvailableTournament($id) {
       $date = Carbon::now()->toDateTimeString();
       $tournament =  $this->model->query()->select([
