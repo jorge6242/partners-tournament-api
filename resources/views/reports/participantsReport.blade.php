@@ -65,7 +65,7 @@
         </style>
     </head>
     <body>
-            <header>Reporte Inscripcion de Torneo de {{ $tournament->description }}</header>
+            <header>Reporte Inscripcion de Evento de {{ $tournament->description }}</header>
             <footer>
                 <div class="page-number"></div> 
             </footer>

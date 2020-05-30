@@ -56,7 +56,7 @@ class TournamentService {
 		if ($this->repository->checkRecord($request['description'])) {
             return response()->json([
                 'success' => false,
-                'message' => 'Torneo ya existe'
+                'message' => 'Evento ya existe'
             ])->setStatusCode(400);
 		}
 		if($request['picture'] !== null) {
@@ -163,7 +163,7 @@ class TournamentService {
 		if($tournamenUser) {
 			return response()->json([
                 'success' => false,
-                'message' => 'El torneo no puede eliminarse porque tiene inscriptiones asociadas'
+                'message' => 'El Evento no puede eliminarse porque tiene inscriptiones asociadas'
             ])->setStatusCode(400);
 		}
 		$data = $this->repository->delete($id);
@@ -207,18 +207,31 @@ class TournamentService {
 	 public function storeParticipant($request) {
 		$date = Carbon::now();
 		$user = auth()->user();
+
+		// Validacion si el participante existe en el evento
 		$isValid = $this->tournamentUserModel->query()
 			->where('user_id', $user->id)
 			->where('tournament_id', $request['tournament_id'] )
 			->with(['tournament'])
 			->first();
-			if($isValid) {
-				$tournament = $isValid->tournament()->first();
+		if($isValid) {
+			$tournament = $isValid->tournament()->first();
 			return response()->json([
-                'success' => false,
-                'message' => 'Participante ya esta registrado en el Torneo : '.$tournament->description.''
-            ])->setStatusCode(400);
+				'success' => false,
+				'message' => 'Participante ya esta registrado en el Evento : '.$tournament->description.''
+			])->setStatusCode(400);
 		}
+
+		//Validacion de maximo de participantes
+		$participants = $this->tournamentUserModel->where('tournament_id', $request['tournament_id'])->where('status','!=',"-1")->count();
+		$currentTournament = $this->repository->find($request['tournament_id']);
+		if($participants >= (float)$currentTournament->max_participants) {
+			return response()->json([
+				'success' => false,
+				'message' => 'El cupo maximo de participantes se ha excedido <br> Intente nuevamente mas tarde para verificar si se libera algun cupo y se puede inscribir nuevamente.'
+			])->setStatusCode(400);
+		}
+
 		$request['register_date'] = $date;
 		$request['locator'] = $this->getTokenString(10);
 		$request['confirmation_link'] = md5($user->doc_id.$date.microtime());
