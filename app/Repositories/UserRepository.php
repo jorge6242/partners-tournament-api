@@ -54,9 +54,9 @@ class UserRepository  {
       return $this->model->where('doc_id', $request['doc_id'])->where('email', $request['email'])->where('phone_number', $request['phone_number'])->first();
     }
 
-    public function forcedLogin($username)
+    public function forcedLogin($docId, $token)
     {
-      return $this->model->where('username', $username)->first(); 
+      return $this->model->where('doc_id', $docId)->where('token', $token)->first();
     }
 
     /**

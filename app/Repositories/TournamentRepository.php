@@ -193,6 +193,7 @@ class TournamentRepository  {
         'status',
         ])->with(['rules','currency','payments','groups'])->where('t_categories_id', $category)->where('date_register_from', '<=', $date)->where('date_register_to', '>=', $date)->get();
       foreach ($tournaments as $key => $value) {
+        $tournaments[$key]->participants = $this->tournamentUserModel->where('tournament_id', $value->id)->where('status','!=',"-1")->count();
         if($value->picture !== null) {
           $tournaments[$key]->picture = url('storage/tournaments/'.$value->picture);
         }
@@ -212,6 +213,15 @@ class TournamentRepository  {
       }
       return false;
     }
+
+    public function getAvailableQuota($id) {
+    $participants = $this->tournamentUserModel->where('tournament_id', $id)->where('status','!=',"-1")->count();
+		$currentTournament = $this->model->find($id);
+		if($participants >= (float)$currentTournament->max_participants) {
+			return true;
+    }
+    return false;
+  }
 
     public function getAvailableTournament($id) {
       $date = Carbon::now()->toDateTimeString();

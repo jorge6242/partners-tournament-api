@@ -30,6 +30,7 @@ class PassportController extends Controller
                 'message' => 'Usuario ya existe'
             ])->setStatusCode(400);
         }
+        $attr['confirmation_link'] = md5($request['doc_id'].microtime());
         $user = User::create($attr);
         $role = Role::where('slug', 'participante')->first();
         $user->assignRole($role->id);

@@ -87,17 +87,14 @@ class UserService {
 		}
 
 		public function forcedLogin($request) {
-			$user =  $this->repository->forcedLogin($request['socio']);
+			$user =  $this->repository->forcedLogin($request['docId'], $request['token']);
 			if($user) {
-				$token = $this->loginTokenService->find($request['socio'], $request['token']);
-				if($token) {
-					$auth = Auth::login($user);
-					$token = auth()->user()->createToken('TutsForWeb')->accessToken;
-					$user = auth()->user();
-					$user->roles = auth()->user()->getRoles();
-					return response()->json(['token' => $token, 'user' =>  $user], 200);
-					}
-				}
+				$auth = Auth::login($user);
+				$token = auth()->user()->createToken('TutsForWeb')->accessToken;
+				$user = auth()->user();
+				$user->roles = auth()->user()->getRoles();
+				return response()->json(['token' => $token, 'user' =>  $user], 200);
+			}
 		return response()->json([
 			'success' => false,
 			'message' => 'You must login first'

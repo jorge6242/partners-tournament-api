@@ -288,4 +288,8 @@ class TournamentService {
 	  public function getAvailablePlayerTournament($id) {
 		return $this->repository->getAvailablePlayerTournament($id);
 	  }
+
+	  public function getAvailableQuota($id) {
+		return $this->repository->getAvailableQuota($id);
+	  }
 }

@@ -33,7 +33,10 @@ class User extends Authenticatable
         'handicapFVG',
         'gender_id',
         'people_id',
-        'new_user'
+        'new_user',
+        'confirmation_link',
+        'dateconfirmed',
+        'token'
     ];
 
     /**
