@@ -42,6 +42,7 @@ class TournamentRepository  {
         't_categories_id',
         't_category_types_id',
         'status',
+        'paypal_id'
         ])->where('id', $id)->with(['payments', 'groups'])->first();
         if($tournament->picture !== null) {
           $tournament->picture = url('storage/tournaments/'.$tournament->picture);
