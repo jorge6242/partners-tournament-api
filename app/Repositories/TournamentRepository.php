@@ -42,7 +42,8 @@ class TournamentRepository  {
         't_categories_id',
         't_category_types_id',
         'status',
-        'paypal_id'
+        'paypal_id',
+        'booking_type'
         ])->where('id', $id)->with(['payments', 'groups'])->first();
         if($tournament->picture !== null) {
           $tournament->picture = url('storage/tournaments/'.$tournament->picture);
@@ -77,6 +78,8 @@ class TournamentRepository  {
           't_categories_id',
           't_category_types_id',
           'status',
+          'booking_type',
+          'paypal_id'
           ])->with(['category','currency'])->paginate($perPage);
     }
 
@@ -101,6 +104,8 @@ class TournamentRepository  {
           't_categories_id',
           't_category_types_id',
           'status',
+          'booking_type',
+          'paypal_id',
           ])->with(['rules','currency','payments','groups'])->get();
         foreach ($tournaments as $key => $value) {
           if($value->picture !== null) {
@@ -131,13 +136,15 @@ class TournamentRepository  {
      * @param  object $queryFilter
     */
     public function search($queryFilter) {
-      $search;
-      if($queryFilter->query('term') === null) {
-        $search = $this->model->all();  
-      } else {
-        $search = $this->model->where('description', 'like', '%'.$queryFilter->query('term').'%')->paginate($queryFilter->query('perPage'));
-      }
-     return $search;
+      $searchQuery = $queryFilter;
+        return $this->model->query()->where(function($q) use($searchQuery) {
+          if ($searchQuery->query('booking_type') !== NULL) {
+            $q->where('booking_type', $searchQuery->query('booking_type'));
+          }
+          if ($searchQuery->query('description') !== NULL) {
+            $q->where('description', 'like', "%{$searchQuery->query('description')}%");
+          }
+        })->with(['category','currency'])->paginate($searchQuery->query('perPage'));
     }
 
     public function getByCategory($category) {
@@ -161,6 +168,8 @@ class TournamentRepository  {
         't_categories_id',
         't_category_types_id',
         'status',
+        'booking_type',
+        'paypal_id',
         ])->with(['rules','currency','payments','groups'])->where('t_categories_id', $category)->get();
       foreach ($tournaments as $key => $value) {
         if($value->picture !== null) {
@@ -192,6 +201,8 @@ class TournamentRepository  {
         't_categories_id',
         't_category_types_id',
         'status',
+        'booking_type',
+        'paypal_id',
         ])->with(['rules','currency','payments','groups'])->where('t_categories_id', $category)->where('date_register_from', '<=', $date)->where('date_register_to', '>=', $date)->get();
       foreach ($tournaments as $key => $value) {
         $tournaments[$key]->participants = $this->tournamentUserModel->where('tournament_id', $value->id)->where('status','!=',"-1")->count();
@@ -246,6 +257,8 @@ class TournamentRepository  {
         't_categories_id',
         't_category_types_id',
         'status',
+        'booking_type',
+        'paypal_id',
         ])->where('id', $id)->where('date_register_from', '<=', $date)->where('date_register_to', '>=', $date)->first();   
       return $tournament;
     }
@@ -261,6 +274,14 @@ class TournamentRepository  {
           $q->select('id', 'description');
         },
         ]);
+
+        // if($queryFilter->query('bookingType') > 0) {
+        //   $query = $queryFilter->query('bookingType');
+        //   $inscriptions->whereHas('tournament', function($q) use($query) {
+        //     $q->where('booking_type',$query);
+        //   });
+        // } 
+
         if(($queryFilter->query('category') &&  $queryFilter->query('category') > 0) && ($queryFilter->query('tournament') &&  $queryFilter->query('category') > 0)) {
           $inscriptions->where('tournament_id', $queryFilter->query('tournament'));
         } 

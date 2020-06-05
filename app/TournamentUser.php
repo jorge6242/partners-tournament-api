@@ -21,6 +21,9 @@ class TournamentUser extends Model
         't_categories_groups_id',
         'user_notes',
         'comments',
+        'nro_comprobante',
+        'canal_pago',
+        'fec_pago'
     ];
 
     public function payment()

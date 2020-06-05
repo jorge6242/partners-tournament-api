@@ -306,4 +306,22 @@ class TournamentController extends Controller
         }
     }
 
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateParticipantPayment(Request $request)
+    {
+        $dataRequest = $request->all();
+        $data = $this->service->updateParticipantPayment($dataRequest);
+        if($data) {
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ]);
+        }
+    }
+
 }

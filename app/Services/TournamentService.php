@@ -285,6 +285,11 @@ class TournamentService {
 		return $this->tournamentUserModel->find($request['id'])->update($request);
 	  }
 
+	  public function updateParticipantPayment($request){
+		$request['fec_pago'] = Carbon::now();
+		return $this->tournamentUserModel->find($request['id'])->update($request);
+	  }
+
 	  public function getAvailablePlayerTournament($id) {
 		return $this->repository->getAvailablePlayerTournament($id);
 	  }

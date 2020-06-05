@@ -24,7 +24,8 @@ class Tournament extends Model
         'currency_id',
         't_categories_id',
         't_category_types_id',
-        'paypal_id'
+        'paypal_id',
+        'booking_type'
     ];
 
     /**

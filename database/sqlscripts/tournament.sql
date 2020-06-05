@@ -8,4 +8,6 @@
 -- ALTER TABLE tournaments ALTER COLUMN description_details nvarchar(4000) NULL;
 -- ALTER TABLE tournaments ALTER COLUMN user_comments nvarchar(4000) NULL;
 
-ALTER TABLE tournaments ADD paypal_id VARCHAR(255) NULL;
+-- ALTER TABLE tournaments ADD paypal_id VARCHAR(255) NULL;
+
+ALTER TABLE tournaments ADD booking_type INT NULL;

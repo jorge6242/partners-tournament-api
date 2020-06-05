@@ -101,12 +101,15 @@
                                             <td>{{ $participant->date_verified }}</td>
                                             <td>{{ $participant->locator }}</td>
                                             <td>{{ $participant->payment()->first()->description }}</td>
-                                            <td class={{$participant->status == 0 ? 'err-blue' : (($participant->status == 1) ? 'err-green' : 'err-red')}}>
+                                            <td class={{$participant->status == 0 ? 'err-blue' : (($participant->status == 1 || $participant->status == 2) ? 'err-green' : 'err-red')}}>
                                                 @if ($participant->status == 0)
                                                     Pendiente
                                                 @endif
                                                 @if ($participant->status == 1)
-                                                    Verificado
+                                                    Aprobado
+                                                @endif
+                                                @if ($participant->status == 2)
+                                                    Ganador
                                                 @endif 
                                                 @if ($participant->status == -1)
                                                     Rechazado
