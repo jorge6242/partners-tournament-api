@@ -275,12 +275,9 @@ class TournamentRepository  {
         },
         ]);
 
-        // if($queryFilter->query('bookingType') > 0) {
-        //   $query = $queryFilter->query('bookingType');
-        //   $inscriptions->whereHas('tournament', function($q) use($query) {
-        //     $q->where('booking_type',$query);
-        //   });
-        // } 
+        if($queryFilter->query('status') !== null) {
+          $inscriptions->where('status', $queryFilter->query('status'));
+        } 
 
         if(($queryFilter->query('category') &&  $queryFilter->query('category') > 0) && ($queryFilter->query('tournament') &&  $queryFilter->query('category') > 0)) {
           $inscriptions->where('tournament_id', $queryFilter->query('tournament'));
@@ -383,11 +380,17 @@ class TournamentRepository  {
               return  (object)[ 'groups' => $groups, 'tournament' => $currentTournament ];
             }
             $inscriptions = $inscriptions->paginate($queryFilter->query('perPage'));
+              $amount = 0;
               foreach ($inscriptions as $key => $value) {
+                $tournamenAmount = $value->tournament()->first()->amount;
+                if($value->tournament && $tournamenAmount > 0 ) {
+                  $amount = $amount + $tournamenAmount;
+                }
                 if($value->attach_file !== null) {
                   $inscriptions[$key]->attach_file = url('storage/tournamentFiles/'.$value->attach_file);
                 }
               }
-          return $inscriptions;
+              $amount = number_format($amount,2);
+              return  (object)[ 'list' => $inscriptions, 'total' => $amount ];
         }  
 }

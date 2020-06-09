@@ -23,7 +23,9 @@ class TournamentUser extends Model
         'comments',
         'nro_comprobante',
         'canal_pago',
-        'fec_pago'
+        'fec_pago',
+        'winner',
+        'fec_winnner',
     ];
 
     public function payment()

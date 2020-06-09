@@ -253,7 +253,11 @@ class TournamentController extends Controller
     public function getInscriptionsReport(Request $request)
     {
         $data = $this->service->getInscriptionsReport($request);      
-        return $data;
+        return response()->json([
+            'success' => true,
+            'data' => $data->list,
+            'total' => $data->total,
+        ]);
     }
 
                 /**
