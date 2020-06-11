@@ -225,7 +225,7 @@ class TournamentService {
 		//Validacion de maximo de participantes
 		$participants = $this->tournamentUserModel->where('tournament_id', $request['tournament_id'])->where('status','!=',"-1")->count();
 		$currentTournament = $this->repository->find($request['tournament_id']);
-		if($participants >= (float)$currentTournament->max_participants) {
+		if($currentTournament->booking_type == 1 && $participants >= (float)$currentTournament->max_participants) {
 			return response()->json([
 				'success' => false,
 				'message' => 'El cupo maximo de participantes se ha excedido <br> Intente nuevamente mas tarde para verificar si se libera algun cupo y se puede inscribir nuevamente.'
