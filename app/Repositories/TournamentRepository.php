@@ -359,6 +359,8 @@ class TournamentRepository  {
             if ($isPDF) {
               $ins = $inscriptions->get();
               $groups = TCategoriesGroup::all();
+              $nullGroup = (object) [ 'description' => 'Participantes sin Grupo' ];
+              $nullParticipants = array();
               foreach ($groups as $key1 => $group) {
                 $users = array();
                 foreach ($ins as $key2 => $element) {
@@ -368,15 +370,28 @@ class TournamentRepository  {
                     ->with(['user'])->first();
                     if($valid) {
                       array_push($users, $element);
-                    }
+                    } 
                   }
                   if(count($users) > 0) {
                     $groups[$key1]->users = $users;
                   } else {
                     unset($groups[$key1]);
                   }             
+              }
+                foreach ($ins as $key2 => $element) {
+                  $valid = TournamentUser::whereNull('t_categories_groups_id')
+                  ->where('tournament_id',$element->tournament_id)
+                  ->where('user_id', $element->user_id)
+                  ->with(['user'])->first();
+                  if($valid) {
+                    array_push($nullParticipants, $element);
+                  } 
                 }
-                $currentTournament = Tournament::where('id', $queryFilter->query('tournament'))->with(['category'])->first();
+                if(count($nullParticipants) > 0) {
+                  $nullGroup->users = $nullParticipants;
+                  $groups->push($nullGroup);
+                }
+              $currentTournament = Tournament::where('id', $queryFilter->query('tournament'))->with(['category'])->first();
               return  (object)[ 'groups' => $groups, 'tournament' => $currentTournament ];
             }
             $inscriptions = $inscriptions->paginate($queryFilter->query('perPage'));
