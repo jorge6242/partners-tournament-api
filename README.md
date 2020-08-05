@@ -8,7 +8,7 @@
 ## Installation
 
 -   `copy .env.local file informacion , after, create .env file in the main project and paste      the information`
--   `create database : partnersControl`
+-   `create database : partnersTournament`
 -   `update database credentials, lines 13 and 14 in .env`
 -   `composer install`
 -   `php artisan migrate`

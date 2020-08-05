@@ -14,7 +14,7 @@ class AddFieldsTournamentTable extends Migration
     public function up()
     {
         Schema::table('tournaments', function(Blueprint $table) {
-            $table->string('picture')->nullable();
+            // $table->string('picture')->nullable();
         });
     }
 
